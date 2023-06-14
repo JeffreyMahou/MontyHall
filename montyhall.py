@@ -1,92 +1,79 @@
 ######## IMPORTS ######
 
-from random import randint
+from random import choice
 
 ######## CODE ########
 
-def game(n=100):
+def game(n=1000):
     
-    win = [0,0]
-    lose = [0,0]
-    
-    dic = {0:"A",1:"B",2:"C"}
+    results_strat1 = {"win":0, "lose":0}
+    results_strat2 = {"win":0, "lose":0}
     
     for i in range(n):
         
+        doors = ["A", "B", "C"]
         print("the 3 doors are in front of you")
         print("A   B   C")
         print("")
         
-        doors = [0,1,2]
-        door = randint(0,2)
-        gift = randint(0,2)
+        door = choice(doors)
+        gift = choice(doors)
         
-        print("You picked door ",dic[door])
+        print("You picked door ", door)
         
-        push = [0,1,2]
-        push.remove(door)
+        if door == gift:
+            door_pushed = choice([d for d in doors if d != door])
+        else:
+            door_pushed = [d for d in doors if d != door and d != gift][0]
+        doors.remove(door_pushed)
         
-        if door != gift:
-            push.remove(gift)
-            
-        push_ind = randint(0,len(push)-1)
-        pushed = push[push_ind]
-        doors.remove(pushed)
-        
-        print("Behind the door ",dic[pushed],"there is ........ nothing")
+        print("Behind the door ", door_pushed, "there is ........ nothing")
         print()
         print("The remaining doors are ......")
         print()
-        print(dic[doors[0]],"  ",dic[doors[1]])
+        print(doors[0], "  ", doors[1])
         
-        changed = randint(0,1)
         
-        if changed == 0:
-            print("You don't change")
-            print("Your door still is ",dic[door])
-            print()
+        print("If you don't change")
+        print("Your door still is ", door)
+        print()
+        
+        if door == gift:
+            results_strat1["win"] += 1
+            print("you win !!")
             
-            if door == gift:
-                win[0] += 1
-                print("you win !!")
-                
-            else:
-                lose[0] += 1
-                print("you lose :(")
-                print("the gift was in door ",gift)
-            print()
-        
         else:
-            doors.remove(door)
-            print("you change")
-            print("you made the right choice even though Rosi doesn't believe it")
-            print("your door now is ",dic[doors[0]])
-            print()
+            results_strat1["lose"] += 1
+            print("you lose :(")
+            print("the gift was in door ",gift)
+        print()
+    
+        doors.remove(door)
+        print("If you change")
+        print("you made the right choice even though Rosi doesn't believe it")
+        print("your door now is ", doors[0])
+        print()
+        
+        if doors[0] == gift:
+            results_strat2["win"] +=1
+            print("you win !!")
             
-            if doors[0] == gift:
-                win[1] +=1
-                print("you win !!")
-                
-            else:
-                lose[1] += 1
-                print("you lose :(")
-                print("the gift was in door ",gift)
-            print()
+        else:
+            results_strat2["lose"] += 1
+            print("you lose :(")
+            print("the gift was in door ",gift)
+        print()
     
-    print("you played ",n,"games")
+    print("you played ", n, "games")
     print()
-    print("you changed ",win[1]+lose[1],"times")
-    if win[1]+lose[1] > 0 :
-        print("when you changed you won ",win[1],"times")
-        print("the frequency of win is ",win[1]/(win[1]+lose[1]))
+    print("when you changed you won ", results_strat2["win"],"times")
+    print("the frequency of win is ", results_strat2["win"]/(results_strat2["win"]+results_strat2["lose"]))
     
     print()
-    print("you kept the door ",win[0]+lose[0])
-    if win[0]+lose[0] > 0 :
-        print("when doing this you won ",win[0],"times")
-        print("the frequency of win is ",win[0]/(win[0]+lose[0]))
+    print("when you didn't change, you won ", results_strat1["win"], "times")
+    print("the frequency of win is ", results_strat1["win"]/(results_strat1["win"]+results_strat1["lose"]))
 
-
+game()
 
 
 
